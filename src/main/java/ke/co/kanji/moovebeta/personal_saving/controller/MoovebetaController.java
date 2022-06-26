@@ -166,13 +166,13 @@ public class MoovebetaController {
 
         savingService.saveAllPending(account_savings,session,request);
 
-        request.getSession().invalidate();
+       // request.getSession().invalidate();
 
         List<MoovebetaSaving> persisted_account_savings = savingService.persistedAccountSavings(request);
 
         model.addAttribute("persistedAccountSavings", persisted_account_savings!=null? persisted_account_savings:new ArrayList<>());
 
-        return "welcome";
+        return "redirect:/welcome";
     }
 
     @GetMapping("/edit/{id}")
