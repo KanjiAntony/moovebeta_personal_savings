@@ -166,7 +166,6 @@ public class MoovebetaController {
 
         savingService.saveAllPending(account_savings,session,request);
 
-       // request.getSession().invalidate();
 
         List<MoovebetaSaving> persisted_account_savings = savingService.persistedAccountSavings(request);
 
