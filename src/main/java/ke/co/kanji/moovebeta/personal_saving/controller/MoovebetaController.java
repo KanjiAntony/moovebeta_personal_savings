@@ -166,7 +166,6 @@ public class MoovebetaController {
 
         savingService.saveAllPending(account_savings,session,request);
 
-
         List<MoovebetaSaving> persisted_account_savings = savingService.persistedAccountSavings(request);
 
         model.addAttribute("persistedAccountSavings", persisted_account_savings!=null? persisted_account_savings:new ArrayList<>());
