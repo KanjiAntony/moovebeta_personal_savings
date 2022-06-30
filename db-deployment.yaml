@@ -1,0 +1,75 @@
+# Persitent volume claim (PVC) for mysql storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  labels:
+    name: mysql
+    tier: database
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi # amount of storage we are trying to claim
+
+---
+# mysql deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-dep
+  labels:
+    app: mysql-dep
+    tier: database
+spec:
+  selector:
+    matchLabels:
+      app: mysql-k8s-dep
+      tier: database
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels: # must match selectors for deployment and service
+        app: mysql-k8s-dep
+        tier: database
+    spec:
+      containers:
+        - image: mysql:5.6
+          args:
+            - "--ignore-db-dir=lost+found"
+          name: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: BetaSavings@123
+            - name: MYSQL_DATABASE
+              value: personal_savings
+          ports:
+            - containerPort: 3306
+              name: mysql
+          volumeMounts: #mounting volume obtained from PVC
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql # path in container where mounting will take place
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
+
+---
+# Service to expose mysql
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+  labels:
+    app: mysql-k8s-serv
+    tier: database
+spec:
+  ports:
+    - port: 3306
+      targetPort: 3306
+  selector:
+    app: mysql-k8s-dep
+    tier: database
+  clusterIP: None # we use DNS here, thus clusterip is not relevant
