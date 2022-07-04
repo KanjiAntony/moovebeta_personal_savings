@@ -17,4 +17,26 @@ public class RegistrationRequest {
     public String typedCaptcha;
     public String answerCaptcha;
     public String actualCaptcha;
+
+    public RegistrationRequest(String fullname, String email, int phoneNumber, UserRoles role, String password) {
+        this.fullname = fullname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+        this.password = password;
+    }
+
+    public RegistrationRequest(String fullname, String email, int phoneNumber, UserRoles role, String password, String typedCaptcha, String answerCaptcha, String actualCaptcha) {
+        this.fullname = fullname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.role = role;
+        this.password = password;
+        this.typedCaptcha = typedCaptcha;
+        this.answerCaptcha = answerCaptcha;
+        this.actualCaptcha = actualCaptcha;
+    }
+
+    public RegistrationRequest() {
+    }
 }
