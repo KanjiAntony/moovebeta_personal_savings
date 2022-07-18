@@ -30,8 +30,7 @@ public class RegistrationServiceImpl implements RegistrationService{
                 registrationRequest.email,
                 registrationRequest.phoneNumber,
                 passwordEncoder.encode(registrationRequest.password),
-                registrationRequest.role,
-                LocalDateTime.now()
+                registrationRequest.role
         );
 
         moovebetaUserRepository.save(user);

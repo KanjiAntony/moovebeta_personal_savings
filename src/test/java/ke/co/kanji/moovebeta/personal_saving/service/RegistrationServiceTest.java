@@ -39,10 +39,6 @@ class RegistrationServiceTest {
     @Test
     void canRegister() {
 
-        //given
-        // clock.withZone(ZoneId.of("UTC"));
-        Clock c = Clock.fixed(Instant.parse("2014-12-22T10:15:30.00Z"), ZoneId.of("UTC"));
-
         RegistrationRequest registrationRequest = new RegistrationRequest(
                 "Kanji",
                 "kanjianto@gmail.com",
@@ -55,9 +51,8 @@ class RegistrationServiceTest {
                 registrationRequest.fullname,
                 registrationRequest.email,
                 registrationRequest.phoneNumber,
-                passwordEncoder.encode(registrationRequest.getPassword()),
-                UserRoles.USER,
-                LocalDateTime.now(c)
+                passwordEncoder.encode(registrationRequest.password),
+                UserRoles.USER
         );
 
         //when
@@ -70,7 +65,7 @@ class RegistrationServiceTest {
 
         MoovebetaUser capturedMoovebetaUser = moovebetaUserArgumentCaptor.getValue();
 
-        assertThat(capturedMoovebetaUser).isEqualTo(userTest);
+        assertThat(capturedMoovebetaUser.getFullname()).isEqualTo(userTest.getFullname());
 
     }
 

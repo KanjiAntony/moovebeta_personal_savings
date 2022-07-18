@@ -27,8 +27,7 @@ class MoovebetaUserRepositoryTest {
             email,
             0705,
             "password",
-            UserRoles.USER,
-            LocalDateTime.now()
+            UserRoles.USER
         );
         //when
         underTest.save(userTest);

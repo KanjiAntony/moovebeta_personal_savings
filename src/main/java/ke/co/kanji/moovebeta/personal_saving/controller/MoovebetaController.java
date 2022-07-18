@@ -71,8 +71,7 @@ public class MoovebetaController {
                 registrationRequest.email,
                 registrationRequest.phoneNumber,
                 registrationRequest.password,
-                registrationRequest.role,
-                LocalDateTime.now()
+                registrationRequest.role
         );
 
         if(registrationRequest.getTypedCaptcha().equals(registrationRequest.getAnswerCaptcha())) {
