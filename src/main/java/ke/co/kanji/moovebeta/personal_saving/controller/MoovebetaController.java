@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,9 @@ public class MoovebetaController {
 
     @Autowired
     private SavingService savingService;
+
+    @Autowired
+    private Clock clock;
 
     public void captchaOps(RegistrationRequest registrationRequest) {
 
@@ -71,7 +75,8 @@ public class MoovebetaController {
                 registrationRequest.email,
                 registrationRequest.phoneNumber,
                 registrationRequest.password,
-                registrationRequest.role
+                registrationRequest.role,
+                LocalDateTime.now(clock)
         );
 
         if(registrationRequest.getTypedCaptcha().equals(registrationRequest.getAnswerCaptcha())) {

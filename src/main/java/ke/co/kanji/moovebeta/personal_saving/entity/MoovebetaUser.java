@@ -47,19 +47,20 @@ public class MoovebetaUser implements UserDetails {
     private boolean isEnabled = true;
 
     @Column(nullable = false)
-    private static LocalDateTime registered_on;
+    private LocalDateTime registered_on;
 
     public MoovebetaUser(String full_name,
                          String email,
                          int phone_number,
                          String password,
-                         UserRoles roles) {
+                         UserRoles roles,
+                         LocalDateTime registered_on) {
         this.full_name = full_name;
         this.email = email;
         this.phone_number = phone_number;
         this.password = password;
         this.roles = roles;
-        registered_on = LocalDateTime.now();
+        this.registered_on = registered_on;
     }
 
     public MoovebetaUser(){}
