@@ -17,9 +17,12 @@ public class RegistrationServiceImpl implements RegistrationService{
 
     private final MoovebetaUserRepository moovebetaUserRepository;
 
-    public RegistrationServiceImpl(PasswordEncoder passwordEncoder, MoovebetaUserRepository moovebetaUserRepository) {
+    private final Clock clock;
+
+    public RegistrationServiceImpl(PasswordEncoder passwordEncoder, MoovebetaUserRepository moovebetaUserRepository, Clock clock) {
         this.passwordEncoder = passwordEncoder;
         this.moovebetaUserRepository = moovebetaUserRepository;
+        this.clock = clock;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class RegistrationServiceImpl implements RegistrationService{
                 registrationRequest.phoneNumber,
                 passwordEncoder.encode(registrationRequest.password),
                 registrationRequest.role,
-                LocalDateTime.now()
+                LocalDateTime.now(clock)
         );
 
         moovebetaUserRepository.save(user);

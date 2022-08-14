@@ -14,7 +14,10 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.*;
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -25,10 +28,27 @@ class RegistrationServiceTest {
     private RegistrationService underTest;
     private AutoCloseable autoCloseable;
 
+    @Mock private Clock clock;
+
+    private static ZonedDateTime NOW = ZonedDateTime.of(
+            2022,
+            7,
+            27,
+            8,
+            30,
+            30,
+            30,
+            ZoneId.of("GMT")
+    );
+
     @BeforeEach
     void setUp() {
         autoCloseable = MockitoAnnotations.openMocks(this);
-        underTest = new RegistrationServiceImpl(passwordEncoder,moovebetaUserRepository);
+
+        Mockito.when(clock.getZone()).thenReturn(NOW.getZone());
+        Mockito.when(clock.instant()).thenReturn(NOW.toInstant());
+
+        underTest = new RegistrationServiceImpl(passwordEncoder,moovebetaUserRepository, clock);
     }
 
     @AfterEach
@@ -39,10 +59,6 @@ class RegistrationServiceTest {
     @Test
     void canRegister() {
 
-        //given
-        // clock.withZone(ZoneId.of("UTC"));
-        Clock c = Clock.fixed(Instant.parse("2014-12-22T10:15:30.00Z"), ZoneId.of("UTC"));
-
         RegistrationRequest registrationRequest = new RegistrationRequest(
                 "Kanji",
                 "kanjianto@gmail.com",
@@ -51,13 +67,23 @@ class RegistrationServiceTest {
                 "password"
         );
 
+        LocalDateTime registered_on = LocalDateTime.of(
+                2022,
+                7,
+                27,
+                8,
+                30,
+                39,
+                30
+        );
+
         MoovebetaUser userTest = new MoovebetaUser(
                 registrationRequest.fullname,
                 registrationRequest.email,
                 registrationRequest.phoneNumber,
-                passwordEncoder.encode(registrationRequest.getPassword()),
+                passwordEncoder.encode(registrationRequest.password),
                 UserRoles.USER,
-                LocalDateTime.now(c)
+                registered_on
         );
 
         //when
@@ -70,7 +96,7 @@ class RegistrationServiceTest {
 
         MoovebetaUser capturedMoovebetaUser = moovebetaUserArgumentCaptor.getValue();
 
-        assertThat(capturedMoovebetaUser).isEqualTo(userTest);
+        assertThat(capturedMoovebetaUser.getFullname()).isEqualTo(userTest.getFullname());
 
     }
 

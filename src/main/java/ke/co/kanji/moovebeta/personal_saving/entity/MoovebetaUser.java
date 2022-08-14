@@ -53,7 +53,8 @@ public class MoovebetaUser implements UserDetails {
                          String email,
                          int phone_number,
                          String password,
-                         UserRoles roles, LocalDateTime registered_on) {
+                         UserRoles roles,
+                         LocalDateTime registered_on) {
         this.full_name = full_name;
         this.email = email;
         this.phone_number = phone_number;
